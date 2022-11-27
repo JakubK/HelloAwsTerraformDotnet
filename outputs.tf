@@ -1,5 +1,4 @@
-# Output value definitions
-
+# <Lambda>
 output "lambda_bucket_name" {
   description = "Name of the S3 bucket used to store function code."
 
@@ -17,3 +16,16 @@ output "base_url" {
 
   value = aws_lambda_function_url.lambda_container_demo_dev.function_url
 }
+
+# </Lambda>
+
+# <Frontend>
+
+
+output "frontend_bucket" {
+  description = "Name of bucket where frontend static files will go"
+  value       = aws_s3_bucket.frontend_bucket.id
+}
+
+# </Frontend>
+

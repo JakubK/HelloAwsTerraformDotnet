@@ -20,7 +20,7 @@ variable "aws_secret_key" {
 }
 
 variable "lambda_archive" {
-  type = string
+  type        = string
   description = "Full name of archive file containing compiled lambda source"
-  default = "hello-world.zip"
+  default     = "lambda.zip"
 }
