@@ -15,6 +15,12 @@ terraform {
   }
 
   required_version = "~> 1.0"
+
+  backend "s3" {
+    bucket = "hello-aws-tfstate"
+    key = "mystate"
+    region = "eu-west-3"
+  }
 }
 
 provider "aws" {
