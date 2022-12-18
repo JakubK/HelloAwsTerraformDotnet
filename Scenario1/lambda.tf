@@ -10,6 +10,11 @@ resource "aws_lambda_function" "api_lambda" {
   source_code_hash = data.archive_file.lambda_api_zip.output_base64sha256
   role = aws_iam_role.lambda_exec.arn
 
+  environment {
+    variables = {
+      "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}"
+    }
+  }
 }
 
 resource "aws_lambda_function_url" "lambda_container_demo_dev" {
@@ -37,6 +42,11 @@ resource "aws_lambda_function" "handler_lambda" {
   source_code_hash = data.archive_file.lambda_handler_zip.output_base64sha256
   role = aws_iam_role.lambda_exec.arn
 
+  environment {
+    variables = {
+      "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}"
+    }
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
