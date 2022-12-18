@@ -36,3 +36,11 @@ response.json
 
 *.zip
 terraform.exe
+
+
+# Dotnet files
+bin
+obj
+
+# Editor files
+.idea
