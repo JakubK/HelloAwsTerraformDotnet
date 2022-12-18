@@ -1,4 +1,7 @@
-﻿using Amazon.Lambda.AspNetCoreServer.Hosting;
+﻿using Amazon.DynamoDBv2;
+using SimpleAPI.Repositories;
+using SimpleAPI.Services;
+using StackExchange.Redis;
 
 namespace SimpleAPI;
 
@@ -14,6 +17,16 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSwaggerGen();
+        services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient());
+        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(Configuration.GetValue<string>("Redis:ConnectionString")));
+        services.AddSingleton<IProductRepository>(x =>
+            new ProductRepository(
+                x.GetRequiredService<IAmazonDynamoDB>(),
+                x.GetRequiredService<IConnectionMultiplexer>(), Configuration.GetValue<string>("DynamoDb:TableName")));
+        services.AddSingleton<IProductService, ProductService>();
+        
+        
         services.AddControllers();
         services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
     }
@@ -24,10 +37,11 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
-
         app.UseRouting();
 
         app.UseAuthorization();
