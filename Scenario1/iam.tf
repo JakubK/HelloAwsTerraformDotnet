@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
-  role = aws_iam_role.api_iam_role
+  role = aws_iam_role.api_iam_role.arn
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
