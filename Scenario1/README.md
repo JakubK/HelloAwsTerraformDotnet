@@ -28,5 +28,5 @@ terraform validate
 ``` 
 
 ### Credits
-Entry version of used source code and Scenario idea was taken from
+Entry version of used C# source code for lambdas and Scenario idea was taken from
 https://github.com/Elfocrash/aws-videos/tree/master/DynamoDbStreams 

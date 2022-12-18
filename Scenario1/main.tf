@@ -11,3 +11,4 @@ data "archive_file" "lambda_handler_zip" {
   output_path = "${path.module}/${var.handler_archive}"
 }
 
+data "aws_caller_identity" "current" {}
