@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
-  role = aws_iam_role.api_iam_role.arn
+  role       = aws_iam_role.api_iam_role.arn
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
@@ -56,6 +56,6 @@ data "aws_iam_policy_document" "dynamodb_access" {
       "dynamodb:PutItem",
       "dynamodb:UpdateItem"
     ]
-    resources = [ "arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${aws_dynamodb_table.dynamodb_items_table.name}" ]
+    resources = ["arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${aws_dynamodb_table.dynamodb_items_table.name}"]
   }
 }

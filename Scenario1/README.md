@@ -20,7 +20,7 @@ Both Lambdas should be fed with the compiled source code placed in the special S
 
 ### Get Started
 
-To get started you need to clone this repository, provide `aws_access_key` and `aws_acceaws_secret_keyss_key`
+To get started you need to clone this repository, provide `aws_access_key` and `aws_secret_key`
 variable values and execute
 ```terraform
 terraform init

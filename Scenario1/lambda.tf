@@ -8,7 +8,7 @@ resource "aws_lambda_function" "api_lambda" {
   handler = "SimpleAPI::SimpleAPI.LambdaEntryPoint::FunctionHandlerAsync"
 
   source_code_hash = data.archive_file.lambda_api_zip.output_base64sha256
-  role = aws_iam_role.api_iam_role.arn
+  role             = aws_iam_role.api_iam_role.arn
 
   environment {
     variables = {
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "api_lambda" {
   }
 }
 
-resource "aws_lambda_function_url" "lambda_container_demo_dev" {
+resource "aws_lambda_function_url" "api_lambda_url" {
   function_name      = aws_lambda_function.api_lambda.function_name
   authorization_type = "NONE"
   cors {
@@ -40,7 +40,7 @@ resource "aws_lambda_function" "handler_lambda" {
   handler = "StreamHandler::StreamHandler.Function::FunctionHandlerAsync"
 
   source_code_hash = data.archive_file.lambda_handler_zip.output_base64sha256
-  role = aws_iam_role.handler_iam_role.arn
+  role             = aws_iam_role.handler_iam_role.arn
 
   environment {
     variables = {
@@ -50,8 +50,8 @@ resource "aws_lambda_function" "handler_lambda" {
 }
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
-  event_source_arn = aws_dynamodb_table.dynamodb_items_table.stream_arn
-  function_name = aws_lambda_function.handler_lambda.arn
+  event_source_arn  = aws_dynamodb_table.dynamodb_items_table.stream_arn
+  function_name     = aws_lambda_function.handler_lambda.arn
   starting_position = "LATEST"
-  batch_size = 100
+  batch_size        = 100
 }

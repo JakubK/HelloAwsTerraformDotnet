@@ -1,5 +1,5 @@
 data "archive_file" "lambda_api_zip" {
-  type = "zip"
+  type        = "zip"
   source_dir  = "${path.module}/SimpleAPI/bin/Debug/net6.0"
   output_path = "${path.module}/${var.api_archive}"
 }
