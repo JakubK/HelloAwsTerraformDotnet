@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = "asdasd"
+  bucket = "jk-scenario1-bucket"
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {

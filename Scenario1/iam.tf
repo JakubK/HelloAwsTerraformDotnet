@@ -1,5 +1,5 @@
 resource "aws_iam_role" "api_iam_role" {
-  name = "api_role"
+  name = "api-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,7 +15,7 @@ resource "aws_iam_role" "api_iam_role" {
 }
 
 resource "aws_iam_role" "handler_iam_role" {
-  name = "stream_handler_role"
+  name = "handler-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
-  role       = aws_iam_role.api_iam_role.arn
+  role       = aws_iam_role.api_iam_role.name
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
