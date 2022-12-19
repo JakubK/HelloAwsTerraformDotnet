@@ -31,7 +31,7 @@ resource "aws_lambda_function_url" "api_lambda_url" {
 }
 
 resource "aws_lambda_function" "handler_lambda" {
-  function_name = "API"
+  function_name = "Handler"
 
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.handler_lambda_source.key
