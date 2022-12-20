@@ -23,7 +23,7 @@ public class Startup
         services.AddSingleton<IProductRepository>(x =>
             new ProductRepository(
                 x.GetRequiredService<IAmazonDynamoDB>(),
-                x.GetRequiredService<IConnectionMultiplexer>(), Configuration.GetValue<string>("DynamoDb:TableName")));
+                x.GetRequiredService<IConnectionMultiplexer>(), Configuration.GetValue<string>("DynamoDbTable")));
         services.AddSingleton<IProductService, ProductService>();
         
         
