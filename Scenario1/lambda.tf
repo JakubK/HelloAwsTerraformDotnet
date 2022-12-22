@@ -14,7 +14,7 @@ resource "aws_lambda_function" "api_lambda" {
   environment {
     variables = {
         "DynamoDbTable" = "items"
-        "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}"
+        "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
     }
   }
 }
@@ -47,7 +47,7 @@ resource "aws_lambda_function" "handler_lambda" {
 
   environment {
     variables = {
-      "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}"
+        "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
     }
   }
 }
