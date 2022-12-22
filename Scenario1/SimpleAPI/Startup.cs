@@ -19,7 +19,7 @@ public class Startup
     {
         services.AddSwaggerGen();
         services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient());
-        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(Configuration.GetValue<string>("Redis:ConnectionString")));
+        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnectionString")));
         services.AddSingleton<IProductRepository>(x =>
             new ProductRepository(
                 x.GetRequiredService<IAmazonDynamoDB>(),

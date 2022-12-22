@@ -27,6 +27,15 @@ terraform init
 terraform validate
 ``` 
 
+### Caution
+
+Resources created with this scenario might cost money.
+Remember to destroy all resources when you're done
+
+```terraform
+terraform destroy
+```
+
 ### Credits
 Entry version of used C# source code for lambdas and Scenario idea was taken from
 https://github.com/Elfocrash/aws-videos/tree/master/DynamoDbStreams 

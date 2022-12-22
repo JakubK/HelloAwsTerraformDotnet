@@ -40,8 +40,17 @@ resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "stream_policy_attachment" {
+  role       = aws_iam_role.handler_iam_role.name
+  policy_arn = aws_iam_policy.stream_policy.arn
+}
+
 resource "aws_iam_policy" "dynamodb_policy" {
   policy = data.aws_iam_policy_document.dynamodb_access.json
+}
+
+resource "aws_iam_policy" "stream_policy" {
+  policy = data.aws_iam_policy_document.dynamodb_stream.json
 }
 
 data "aws_iam_policy_document" "dynamodb_access" {
@@ -57,5 +66,18 @@ data "aws_iam_policy_document" "dynamodb_access" {
       "dynamodb:UpdateItem"
     ]
     resources = ["arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${aws_dynamodb_table.dynamodb_items_table.name}"]
+  }
+}
+
+data "aws_iam_policy_document" "dynamodb_stream" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetRecords",
+      "dynamodb:GetShardIterator",
+      "dynamodb:DescribeStream",
+      "dynamodb:ListStreams"
+    ]
+    resources = ["arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${aws_dynamodb_table.dynamodb_items_table.name}/stream/*"]
   }
 }
