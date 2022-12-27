@@ -6,7 +6,7 @@ resource "aws_dynamodb_table" "dynamodb_items_table" {
   read_capacity    = 1
   write_capacity   = 1
 
-  hash_key = "pk"
+  hash_key  = "pk"
   range_key = "sk"
 
   attribute {

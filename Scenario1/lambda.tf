@@ -1,6 +1,13 @@
 resource "aws_lambda_function" "api_lambda" {
   function_name = "API"
 
+  vpc_config {
+    subnet_ids = data.aws_subnets.subnet_ids.ids
+    security_group_ids = [
+      aws_default_vpc.default.default_security_group_id,
+    ]
+  }
+
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.api_lambda_source.key
 
@@ -9,12 +16,12 @@ resource "aws_lambda_function" "api_lambda" {
 
   source_code_hash = data.archive_file.lambda_api_zip.output_base64sha256
   role             = aws_iam_role.api_iam_role.arn
-  timeout = 30
+  timeout          = 30
 
   environment {
     variables = {
-        "DynamoDbTable" = "items"
-        "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
+      "DynamoDbTable"         = "items"
+      "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
     }
   }
 }
@@ -38,16 +45,23 @@ resource "aws_lambda_function" "handler_lambda" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.handler_lambda_source.key
 
+  vpc_config {
+    subnet_ids = data.aws_subnets.subnet_ids.ids
+    security_group_ids = [
+      aws_default_vpc.default.default_security_group_id,
+    ]
+  }
+
   runtime = "dotnet6"
   handler = "StreamHandler::StreamHandler.Function::FunctionHandlerAsync"
 
   source_code_hash = data.archive_file.lambda_handler_zip.output_base64sha256
   role             = aws_iam_role.handler_iam_role.arn
-  timeout = 30
+  timeout          = 30
 
   environment {
     variables = {
-        "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
+      "RedisConnectionString" = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.cache_nodes[0].port}"
     }
   }
 }
