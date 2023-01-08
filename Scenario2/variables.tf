@@ -1,0 +1,24 @@
+variable "aws_region" {
+  description = "AWS region for all resources."
+
+  type    = string
+  default = "eu-west-3"
+}
+
+variable "aws_access_key" {
+  type        = string
+  description = "aws access key"
+  sensitive   = true
+}
+
+variable "aws_secret_key" {
+  type        = string
+  description = "aws secret key"
+  sensitive   = true
+}
+
+variable "lambda_archive" {
+  type        = string
+  description = "Full name of archive file containing compiled Stream handler lambda source"
+  default     = "zipHandler.zip"
+}
