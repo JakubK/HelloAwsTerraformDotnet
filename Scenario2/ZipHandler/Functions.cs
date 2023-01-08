@@ -1,7 +1,8 @@
+using System.IO.Compression;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.S3Events;
 using Amazon.S3;
-using Amazon.S3.Util;
+using Amazon.S3.Model;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -10,6 +11,7 @@ namespace ZipHandler;
 
 public class Functions
 {
+    private readonly string UnzipBucketName = Environment.GetEnvironmentVariable("unzip_bucket")!;
     IAmazonS3 S3Client { get; set; }
 
     /// <summary>
@@ -51,8 +53,19 @@ public class Functions
 
             try
             {
-                var response = await this.S3Client.GetObjectMetadataAsync(s3Event.Bucket.Name, s3Event.Object.Key);
-                context.Logger.LogInformation(response.Headers.ContentType);
+                var getObjectResponse = await S3Client.GetObjectAsync(s3Event.Bucket.Name, s3Event.Object.Key);
+                using var zipArchive = new ZipArchive(getObjectResponse.ResponseStream);
+                foreach (var entry in zipArchive.Entries)
+                {
+                    var memoryStream = new MemoryStream();
+                    await memoryStream.CopyToAsync(entry.Open());
+                    await S3Client.PutObjectAsync(new PutObjectRequest
+                    {
+                        InputStream = memoryStream,
+                        Key = $"{s3Event.Object.Key}/{entry.Name}",
+                        BucketName = UnzipBucketName
+                    });
+                }
             }
             catch (Exception e)
             {
